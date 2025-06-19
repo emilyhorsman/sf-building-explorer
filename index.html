@@ -270,6 +270,22 @@
       max-width: none;
       width: 100%;
     }
+    
+    /* Fix input padding to prevent icon overlap */
+    .maplibregl-ctrl-geocoder .maplibregl-ctrl-geocoder--input {
+      padding-left: 45px !important;
+      padding-right: 45px !important;
+    }
+    
+    /* Position search icon */
+    .maplibregl-ctrl-geocoder .maplibregl-ctrl-geocoder--icon-search {
+      left: 15px !important;
+    }
+    
+    /* Fix clear button and loading spinner container */
+    .maplibregl-ctrl-geocoder .maplibregl-ctrl-geocoder--pin-right {
+      right: 12px !important;
+    }
 
     table {
       width: 100%;
