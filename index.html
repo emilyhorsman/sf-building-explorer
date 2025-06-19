@@ -482,7 +482,7 @@
       var geocoder = new MaplibreGeocoder({
         maplibregl: maplibregl,
         forwardGeocode: function(config) {
-          var url = 'https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=' + encodeURIComponent(config.query)
+          var url = 'https://nominatim.openstreetmap.org/search?format=geojson&limit=5&bounded=1&viewbox=-122.5155,37.8324,-122.3247,37.6040&q=' + encodeURIComponent(config.query + ', San Francisco, CA')
           return fetch(url)
             .then(function(response) { return response.json(); })
             .then(function(data) {
@@ -1474,7 +1474,7 @@
       // lookup geo by address text string
       var searchAddress = (e.result.address || '') + ' ' + text.toLowerCase()
       searchAddress = searchAddress.trim()
-      fetch(BASE_API + DATASETS['addresses'].id + '.geojson?$select=*,lower(address)&$where=lower_address="' + searchAddress + '"')
+      fetch(BASE_API + DATASETS['addresses'].id + '.geojson?$select=*,lower(address)&$where=lower_address="' + encodeURIComponent(searchAddress) + '"')
         .then(function (res) {
           res.json().then(function (addressJson) {
             if (addressJson.features.length > 0) {
