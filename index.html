@@ -564,28 +564,41 @@
         }
       },
       'plancases': {
-        id: 'kgai-svwy',
-        geometry: 'the_geom',
-        fbf: '7yuw-98m5',
+        id: 'qvu5-m3a2',
+        fbf: 'qvu5-m3a2',
+        parcel: 'BLOCK||"/"||LOT',
         name: 'Planning records from SF Planning',
         select: {
-          'record_id': 'record_id',
-          'primary_address': 'address',
+          'RECORD_ID': 'record_id',
+          'PROJECT_ADDRESS': 'address',
           '"Planning"': 'issuing_department',
-          'record_type': 'record_type',
-          'record_status': 'status',
-          'date_opened': 'status_date',
-          'description': 'description'
-        },
-        where: 'record_type_type+in("Applications","Research","Other","Project")'
+          'RECORD_TYPE': 'record_type',
+          'RECORD_STATUS': 'status',
+          '"N/A"': 'status_date',
+          'DESCRIPTION': 'description'
+        }
+      },
+      'plannonprojects': {
+        id: 'y673-d69b',
+        fbf: 'y673-d69b',
+        parcel: 'BLOCK||"/"||LOT',
+        name: 'Planning records (non-projects) from SF Planning',
+        select: {
+          'RECORD_ID': 'record_id',
+          'PROJECT_ADDRESS': 'address',
+          '"Planning"': 'issuing_department',
+          'RECORD_TYPE': 'record_type',
+          'RECORD_STATUS': 'status',
+          '"N/A"': 'status_date',
+          'DESCRIPTION': 'description'
+        }
       },
       'energy': {
-        id: '75rg-imyz',
-        fbf: 'j2j3-acqj',
-        geometry: 'full_address',
-        parcel: 'parcel_s',
-        pattern: 'block_num/lot_num',
-        name: 'Existing commercial buildings energy performance report from SF Environment'
+        id: '96ck-qcfe',
+        fbf: '96ck-qcfe',
+        geometry: 'point',
+        parcel: 'parcel_number',
+        name: 'Existing buildings energy performance report from SF Environment'
       },
       'zoning': {
         id: '3i4a-hu95',
@@ -650,7 +663,6 @@
       'dbicomplaints': {
         id: 'frbs-hx9j',
         fbf: 'gm2e-bten',
-        geometry: 'location',
         parcel: 'block||lot',
         name: 'Building complaints from SF Dept of Building Inspection',
         select: {
@@ -664,20 +676,20 @@
         }
       },
       'plancomplaints': {
-        id: 'kgai-svwy',
-        geometry: 'the_geom',
-        fbf: '7yuw-98m5',
-        name: 'Planning records from SF Planning',
+        id: 'y673-d69b',
+        fbf: 'y673-d69b',
+        parcel: 'BLOCK||"/"||LOT',
+        name: 'Planning complaints from SF Planning',
         select: {
           '"Planning"': 'department',
-          'record_type_subtype': 'assigned_to',
-          'record_id': 'complaint_number',
-          'date_opened': 'file_date',
-          'primary_address': 'address',
-          'description': 'description',
+          'RECORD_TYPE': 'assigned_to',
+          'RECORD_ID': 'complaint_number',
+          '"N/A"': 'file_date',
+          'PROJECT_ADDRESS': 'address',
+          'DESCRIPTION': 'description',
           '"N/A"': 'inspection_number'
         },
-        where: 'record_type_type="Complaint"'
+        where: 'RECORD_TYPE="CMP"'
       },
       'cityfacilities': {
         id: 'i5wr-crji',
@@ -693,16 +705,17 @@
         parcel: 'parcel_number',
         name: 'Historic secured property tax rolls from SF Assessor-Recorder',
         select: {
-          'assessed_fixtures_value': 'fixtures_value',
+          'assessed_fixtures_value': 'fixture_value',
           'assessed_improvement_value': 'improvement_value',
           'assessed_land_value': 'land_value',
           'assessed_personal_property_value': 'personal_property_value',
-          'closed_roll_year': 'closed_roll_year',
+          'closed_roll_year': 'closed_roll_fiscal_year',
           'homeowner_exemption_value': 'homeowner_exemption_value',
           'misc_exemption_value': 'misc_exemption_value',
           'current_sales_date': 'current_sales_date',
           'property_location': 'property_location',
-          'recordation_date': 'recordation_date'
+          '"N/A"': 'recordation_date',
+          '"N/A"': 'prior_sales_date'
         }
       }
     }
@@ -1008,7 +1021,7 @@
       loaderOn()
       var TYPES = {
         'permits': {
-          'datasets': ['bldgpermits', 'plancases'],
+          'datasets': ['bldgpermits', 'plancases', 'plannonprojects'],
           'headers': ['issuing_department','record_id','record_type','status','status_date','parcel','address','description'],
           'defaultSort': ['status_date']
         },
@@ -1034,7 +1047,7 @@
         },
         'energy': {
           'datasets': ['energy'],
-          'headers': ['building_address', 'building_name', 'parcel', 'energy_audit_due_date', 'energy_audit_status', 'floor_area', 'property_type_self_selected']
+          'headers': ['building_address', 'building_name', 'parcel', 'energy_audit_due_date', 'energy_audit_status', 'floor_area', 'property_type']
         }
       }
       var cb = 'process' + type
@@ -1319,9 +1332,6 @@
 
       // Land use info
       if (landuse) {
-        // Log to see available fields
-        console.log('Landuse data:', landuse)
-        
         var primaryUse = landuse.landuse || landuse.land_use || 'Unknown'
         body = '<div>Primary land use: ' + (USECODES[primaryUse.toLowerCase()] || primaryUse) + '</div>'
         
