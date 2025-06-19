@@ -516,10 +516,10 @@
     // define datasets used in the app including unique id, name of geometry column, name of parcel column(s) and any select properties
     var DATASETS = {
       'fireinspections': {
-        id: 'vygc-d77z',
+        id: 'wb4c-6hwj',
         fbf: 'wb4c-6hwj',
         geometry: 'location',
-        name: 'Fire Insepctions from SF Fire',
+        name: 'Fire Inspections from SF Fire',
         select: {
           '"Fire"': 'department',
           'address': 'address',
@@ -569,12 +569,12 @@
         parcel: 'BLOCK||"/"||LOT',
         name: 'Planning records from SF Planning',
         select: {
-          'RECORD_ID': 'record_id',
-          'PROJECT_ADDRESS': 'address',
+          'record_id': 'record_id',
+          'project_address': 'address',
           '"Planning"': 'issuing_department',
           'RECORD_TYPE': 'record_type',
-          'RECORD_STATUS': 'status',
-          '"N/A"': 'status_date',
+          'RECORD_STATUS': 'record_status',
+          'open_date': 'open_date',
           'DESCRIPTION': 'description'
         }
       },
@@ -584,12 +584,12 @@
         parcel: 'BLOCK||"/"||LOT',
         name: 'Planning records (non-projects) from SF Planning',
         select: {
-          'RECORD_ID': 'record_id',
-          'PROJECT_ADDRESS': 'address',
+          'record_id': 'record_id',
+          'project_address': 'address',
           '"Planning"': 'issuing_department',
           'RECORD_TYPE': 'record_type',
           'RECORD_STATUS': 'status',
-          '"N/A"': 'status_date',
+          'open_date': 'open_date',
           'DESCRIPTION': 'description'
         }
       },
@@ -628,7 +628,7 @@
         }
       },
       'fireviolations': {
-        id: 'x75j-u3wx',
+        id: '4zuq-2cbe',
         fbf: '4zuq-2cbe',
         geometry: 'location',
         name: 'Violations from SF Fire',
@@ -645,7 +645,7 @@
         }
       },
       'firecomplaints': {
-        id: 'v3w9-dyka',
+        id: '2wsq-7wmv',
         fbf: '2wsq-7wmv',
         geometry: 'location',
         name: 'Fire safety complaints from SF Fire',
@@ -682,14 +682,14 @@
         name: 'Planning complaints from SF Planning',
         select: {
           '"Planning"': 'department',
-          'RECORD_TYPE': 'assigned_to',
+          'RECORD_TYPE': 'nov_type',
           'RECORD_ID': 'complaint_number',
-          '"N/A"': 'file_date',
+          'open_date': 'file_date',
           'PROJECT_ADDRESS': 'address',
           'DESCRIPTION': 'description',
           '"N/A"': 'inspection_number'
         },
-        where: 'RECORD_TYPE="CMP"'
+        where: 'RECORD_TYPE="Complaint"'
       },
       'cityfacilities': {
         id: 'i5wr-crji',
@@ -714,8 +714,7 @@
           'misc_exemption_value': 'misc_exemption_value',
           'current_sales_date': 'current_sales_date',
           'property_location': 'property_location',
-          '"N/A"': 'recordation_date',
-          '"N/A"': 'prior_sales_date'
+          'data_as_of': 'recordation_date',
         }
       }
     }
