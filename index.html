@@ -5,8 +5,8 @@
   <meta charset='utf-8' />
   <title>San Francisco Buildings</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
-  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css'
+  <link href='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css' rel='stylesheet' />
+  <link rel='stylesheet' href='https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.css'
     type='text/css' />
   <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' rel='stylesheet' />
   <link href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css' rel='stylesheet' />
@@ -122,7 +122,7 @@
       padding: 0 5px;
     }
 
-    .mapboxgl-popup-content p {
+    .maplibregl-popup-content p {
       margin-bottom: 0;
     }
 
@@ -267,7 +267,7 @@
       margin-right: 15px;
     }
 
-    .mapboxgl-ctrl-geocoder {
+    .maplibregl-ctrl-geocoder {
       max-width: none;
       width: 100%;
     }
@@ -458,8 +458,8 @@
       Made with <i class="fa fa-heart"><span class="sr-only">heart</span></i> in San Francisco
     </div>
   </div>
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script>
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js'></script>
+  <script src='https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js'></script>
+  <script src='https://unpkg.com/@maplibre/maplibre-gl-geocoder/dist/maplibre-gl-geocoder.min.js'></script>
   <script src="turf.min.js" charset="utf-8"></script>
   <script src="wellknown.js" charset="utf-8"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
@@ -467,13 +467,12 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.min.js"></script>
   <script src="object.assign.js"></script>
   <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZGF0YXNmIiwiYSI6Ilo3bVlHRDQifQ.7gkiPnZtioL8CnCvJ5z9Bg'
-    if (!mapboxgl.supported()) {
-      alert('Your browser does not support Mapbox GL, please use a more recent browser');
+    if (!maplibregl.supported()) {
+      alert('Your browser does not support MapLibre GL, please use a more recent browser');
     } else {
       var center = [-122.41840239268754, 37.778666100153075]
-      var map = new mapboxgl.Map({
-        style: 'mapbox://styles/mapbox/light-v9',
+      var map = new maplibregl.Map({
+        style: 'https://demotiles.maplibre.org/style.json',
         center: center,
         zoom: 16,
         pitch: 60,
@@ -481,8 +480,26 @@
         container: 'map'
       })
 
-      var geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
+      var geocoder = new MaplibreGeocoder({
+        maplibregl: maplibregl,
+        forwardGeocode: function(config) {
+          var url = 'https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=' + encodeURIComponent(config.query)
+          return fetch(url)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+              return {
+                features: data.features.map(function(feature) {
+                  return {
+                    type: 'Feature',
+                    geometry: feature.geometry,
+                    place_name: feature.properties.display_name,
+                    center: [feature.geometry.coordinates[0], feature.geometry.coordinates[1]],
+                    properties: feature.properties
+                  }
+                })
+              }
+            });
+        },
         placeholder: 'Search map by address',
         proximity: {
           longitude: -122.41840239268754,
@@ -526,8 +543,8 @@
         geometry: 'point'
       },
       'parcels': {
-        id: 'acdm-wktn',
-        fbf: 'acdm-wktn',
+        id: '3iun-6we5',
+        fbf: '3iun-6we5',
         geometry: 'shape',
         parcel: 'blklot'
       },
@@ -715,7 +732,7 @@
       "type": "FeatureCollection",
       "features": []
     }
-    var popup = new mapboxgl.Popup({
+    var popup = new maplibregl.Popup({
       closeButton: false,
       closeOnClick: false,
       anchor: 'top-left',

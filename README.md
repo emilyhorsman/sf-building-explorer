@@ -2,7 +2,7 @@
 
 This is a quick and dirty demonstration project showcasing the [use of building footprints](https://data.sfgov.org/Housing-and-Buildings/Building-Footprints/72ai-zege) in an application to link various administrative data together. It is not built to production standards. It's just basic HTML, CSS and javascript with some minimal libraries to support mapping. Libraries include:
 
-1. [Mapbox GL JS](https://github.com/mapbox/mapbox-gl-js)
+1. [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js)
 2. [Turf.js](https://github.com/Turfjs/turf)
 3. [Wellknown](https://github.com/mapbox/wellknown)
 
