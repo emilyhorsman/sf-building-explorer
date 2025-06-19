@@ -1376,7 +1376,14 @@
       // Associated parcels
       var parcels = data.parcels
       var list = parcels.map(function (elem) {
-        var hist = elem.rec_drop ? ' (dropped ' + elem.rec_drop + ')' : ' (added ' + (elem.rec_add || ' on unknown date') + ')'
+        var addDate = elem.date_map_add
+        var dropDate = elem.date_map_drop
+        var hist = ''
+        if (dropDate) {
+          hist = ' (dropped ' + formatDate(dropDate) + ')'
+        } else if (addDate) {
+          hist = ' (added ' + formatDate(addDate) + ')'
+        }
         return '<li>' + elem.blklot + hist + '</li>'
       }).join('')
       body = '<ul class="not-styled">' + list + '</ul>'
